@@ -1,0 +1,37 @@
+The relationship pairs (this is the heart of it)
+Each relation is two lines working together: a raw foreign-key column + a Prisma "navigation" field.
+
+userId String
+The actual database column that stores which user this membership belongs to. It holds a User.id value. This is a real column in the table.
+
+user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+The Prisma navigation property — not a column, just a convenience. It tells Prisma how the link works:
+
+fields: [userId] → "the foreign key is our userId column."
+references: [id] → "it points to the id column on User."
+onDelete: Cascade → "if that User is deleted, delete this membership too" (no leftover orphan rows pointing at a user who no longer exists).
+This lets you write membership.user in code and get the whole User object, instead of manually joining on IDs.
+
+organizationId String + organization Organization @relation(...)
+Exactly the same pattern, but for the org side: organizationId is the FK column pointing to Organization.id, and organization is the navigation field. Same onDelete: Cascade → delete the org, its memberships vanish.
+
+So a Membership row has two foreign keys: one to a User, one to an Organization. That's literally what "links a user to an org" means.
+
+The table-level rules (@@ = applies to the whole table)
+@@unique([userId, organizationId])
+A composite unique constraint: the combination of userId + organizationId must be unique. Translation: a user can't be added to the same org twice. (Hanan can have one row for Acme and one for Beta, but not two rows for Acme.) Enforced by the database itself — even a buggy API can't create duplicates.
+
+@@index([organizationId])
+A database index on organizationId. An index is like a book's index — it makes lookups fast. Since you'll constantly ask "give me all members of org X" (filtering by organizationId), this makes that query fast even with millions of rows. Indexing the columns you frequently filter/join on is a key performance habit.
+
+The mental summary
+
+Membership row = [ id ] + [ role ] + [ which user ] + [ which org ] + [ when ]
+                                         ▲ FK            ▲ FK
+        + rule: (user, org) pair is unique
+        + speed: indexed by org
+It's a bridge between User and Organization that also remembers the role and prevents duplicates.
+
+One formatting note: indentation doesn't matter to Prisma (it's not Python), so your slightly-indented @@unique is fine — but you can run npx prisma format anytime to auto-align everything neatly.
+
+Clear now? When ready, add back @default(MEMBER) if you want, then run npx prisma migrate dev --name init and we'll create the tables.
