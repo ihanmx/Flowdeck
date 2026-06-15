@@ -1,0 +1,8 @@
+cd ~/Desktop/flowdeck/apps/api
+npx prisma studio
+
+npx prisma migrate dev --name add_refresh_token
+
+prisma generate
+
+{"email":"test@flowdeck.dev","password":"secret123"}

@@ -1,0 +1,13 @@
+HTTP/1.1 404 Not Found
+X-Powered-By: Express
+Access-Control-Allow-Origin: http://localhost:3000
+Vary: Origin
+Access-Control-Allow-Credentials: true
+Content-Type: application/json; charset=utf-8
+Content-Length: 76
+ETag: W/"4c-3h+bFYbwBdq1H7eYYTsUNvF2DJM"
+Date: Mon, 15 Jun 2026 07:20:40 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"message":"Cannot POST /auth/refresh","error":"Not Found","statusCode":404}
