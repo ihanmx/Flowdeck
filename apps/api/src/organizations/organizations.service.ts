@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateOrganizationDto } from './dto/create-organization.dto';
 
 @Injectable()
 export class OrganizationsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(userId: string, name: string) {
+  async create(userId: string, dto: CreateOrganizationDto) {
     //A slug is a URL-friendly version of a name — lowercase, no spaces, no special characters, words joined by dashes.
-    const slug = await this.generateUniqueSlug(name);
+    const slug = await this.generateUniqueSlug(dto.name);
     //transaction It runs several database operations as one atomic unit.
     return this.prisma.$transaction(async (tx) => {
       const organization = await tx.organization.create({
-        data: { name, slug },
+        data: { name: dto.name, slug },
       });
 
       await tx.membership.create({
@@ -62,7 +63,6 @@ export class OrganizationsService {
     return slug;
   }
 }
-
 
 // What it does	Example
 // include	add related records (uses all their fields unless you nest a select)	include: { user: true }

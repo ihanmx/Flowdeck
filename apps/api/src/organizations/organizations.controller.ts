@@ -13,7 +13,7 @@ export class OrganizationsController {
 
   @Post()
   create(@CurrentUser() user: AuthUser, @Body() dto: CreateOrganizationDto) {
-    return this.organizations.create(user.id, dto.name);
+    return this.organizations.create(user.id, dto);
   }
 
   @Get()

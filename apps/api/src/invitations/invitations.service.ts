@@ -1,5 +1,4 @@
 import { PrismaService } from '../prisma/prisma.service';
-import { Role } from '../generated/prisma/enums';
 import {
   BadRequestException,
   ConflictException,
@@ -8,6 +7,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type { AuthUser } from '../auth/decorators/current-user.decorator';
+import { CreateInvitationDto } from './dto/create-invitation.dto';
+import { AcceptInvitationDto } from './dto/accept-invitation.dto';
 const INVITE_TTL_DAYS = 7;
 
 @Injectable()
@@ -17,9 +18,10 @@ export class InvitationsService {
   async create(
     organizationId: string,
     invitedById: string,
-    email: string,
-    role: Role = 'MEMBER',
+    dto: CreateInvitationDto,
   ) {
+    const { email, role = 'MEMBER' } = dto;
+
     // 1. Already a member? (only if that email belongs to an existing user)
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
@@ -57,7 +59,9 @@ export class InvitationsService {
     });
   }
 
-  async accept(user: AuthUser, token: string) {
+  async accept(user: AuthUser, dto: AcceptInvitationDto) {
+    const { token } = dto;
+
     const invitation = await this.prisma.invitation.findUnique({
       where: { token },
     });

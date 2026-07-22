@@ -18,3 +18,7 @@ prisma generate
   "password": "secret123",
   "name": "Test User2"
 }
+
+npx prisma migrate dev --name add_projects_boards_columns_tasks
+npx prisma generate
+npx prisma format
