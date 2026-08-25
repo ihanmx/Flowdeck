@@ -206,6 +206,173 @@
           }
         }
       ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "Create project (OWNER/ADMIN only)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Website Redesign\",\n  \"description\": \"Marketing site refresh\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects"]
+            },
+            "description": "Requires OWNER or ADMIN membership. A plain MEMBER gets 403."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.id) pm.environment.set('projectId', res.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List projects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects"]
+            },
+            "description": "Any member of the org can read."
+          }
+        },
+        {
+          "name": "Get project by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}"]
+            },
+            "description": "Tenant-scoped: requesting this project id under a DIFFERENT org's URL returns 404."
+          }
+        },
+        {
+          "name": "Update project (OWNER/ADMIN only)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Website Redesign v2\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete project (OWNER/ADMIN only)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Boards",
+      "item": [
+        {
+          "name": "Create board (OWNER/ADMIN only)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Sprint 1\"\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.id) pm.environment.set('boardId', res.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List boards",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards"]
+            }
+          }
+        },
+        {
+          "name": "Get board by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update board (OWNER/ADMIN only)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Sprint 1 (renamed)\"\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete board (OWNER/ADMIN only)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}"]
+            }
+          }
+        }
+      ]
     }
   ]
 }
