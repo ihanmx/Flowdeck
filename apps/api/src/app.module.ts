@@ -7,7 +7,8 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { InvitationsModule } from './invitations/invitations.module';
-
+import { ProjectsModule } from './projects/projects.module';
+import { BoardsModule } from './boards/boards.module';
 @Module({
   imports: [
     PrismaModule,
@@ -16,6 +17,8 @@ import { InvitationsModule } from './invitations/invitations.module';
     AuthModule,
     OrganizationsModule,
     InvitationsModule,
+    ProjectsModule,
+    BoardsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

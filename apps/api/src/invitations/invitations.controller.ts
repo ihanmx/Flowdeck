@@ -20,11 +20,6 @@ export class InvitationsController {
     @CurrentUser() user: AuthUser,
     @Body() dto: CreateInvitationDto,
   ) {
-    return this.invitations.create(
-      organizationId,
-      user.id,
-      dto.email,
-      dto.role,
-    );
+    return this.invitations.create(organizationId, user.id, dto);
   }
 }

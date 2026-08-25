@@ -20,6 +20,6 @@ export class AcceptInvitationController {
   @Post('accept') // → POST /invitations/accept ✅
   @HttpCode(HttpStatus.OK)
   accept(@CurrentUser() user: AuthUser, @Body() dto: AcceptInvitationDto) {
-    return this.invitations.accept(user, dto.token);
+    return this.invitations.accept(user, dto);
   }
 }
