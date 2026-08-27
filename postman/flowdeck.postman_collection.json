@@ -373,6 +373,74 @@
           }
         }
       ]
+    },
+    {
+      "name": "Columns",
+      "item": [
+        {
+          "name": "Create column (OWNER/ADMIN only)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Todo\"\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}", "columns"]
+            },
+            "description": "New column is appended at the end (position = current column count)."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.id) pm.environment.set('columnId', res.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List columns (ordered by position)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}", "columns"]
+            }
+          }
+        },
+        {
+          "name": "Update column (OWNER/ADMIN only)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"In Progress\"\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns/{{columnId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}", "columns", "{{columnId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete column (OWNER/ADMIN only)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns/{{columnId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}", "columns", "{{columnId}}"]
+            }
+          }
+        }
+      ]
     }
   ]
 }
