@@ -10,6 +10,7 @@ import { InvitationsModule } from './invitations/invitations.module';
 import { ProjectsModule } from './projects/projects.module';
 import { BoardsModule } from './boards/boards.module';
 import { ColumnsModule } from './columns/columns.module';
+import { TasksModule } from './tasks/tasks.module';
 @Module({
   imports: [
     PrismaModule,
@@ -21,6 +22,7 @@ import { ColumnsModule } from './columns/columns.module';
     ProjectsModule,
     BoardsModule,
     ColumnsModule,
+    TasksModule,
   ],
   controllers: [AppController],
   providers: [AppService],

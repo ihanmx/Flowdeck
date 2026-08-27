@@ -6,7 +6,13 @@
   },
   "auth": {
     "type": "bearer",
-    "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
   },
   "item": [
     {
@@ -15,14 +21,30 @@
         {
           "name": "Register",
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"test@flowdeck.dev\",\n  \"password\": \"secret123\",\n  \"name\": \"Test User\"\n}"
             },
-            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
           },
           "event": [
             {
@@ -41,14 +63,30 @@
         {
           "name": "Login",
           "request": {
-            "auth": { "type": "noauth" },
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"test@flowdeck.dev\",\n  \"password\": \"secret123\"\n}"
             },
-            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
           },
           "event": [
             {
@@ -69,7 +107,16 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
           }
         },
         {
@@ -77,11 +124,26 @@
           "request": {
             "auth": {
               "type": "bearer",
-              "bearer": [{ "key": "token", "value": "{{refreshToken}}", "type": "string" }]
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{refreshToken}}",
+                  "type": "string"
+                }
+              ]
             },
             "method": "POST",
             "header": [],
-            "url": { "raw": "{{baseUrl}}/auth/refresh", "host": ["{{baseUrl}}"], "path": ["auth", "refresh"] }
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            }
           },
           "event": [
             {
@@ -102,7 +164,16 @@
           "request": {
             "method": "POST",
             "header": [],
-            "url": { "raw": "{{baseUrl}}/auth/logout", "host": ["{{baseUrl}}"], "path": ["auth", "logout"] }
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
           }
         }
       ]
@@ -114,12 +185,25 @@
           "name": "Create organization",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Acme Corp\"\n}"
             },
-            "url": { "raw": "{{baseUrl}}/organizations", "host": ["{{baseUrl}}"], "path": ["organizations"] }
+            "url": {
+              "raw": "{{baseUrl}}/organizations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations"
+              ]
+            }
           },
           "event": [
             {
@@ -139,7 +223,15 @@
           "request": {
             "method": "GET",
             "header": [],
-            "url": { "raw": "{{baseUrl}}/organizations", "host": ["{{baseUrl}}"], "path": ["organizations"] }
+            "url": {
+              "raw": "{{baseUrl}}/organizations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations"
+              ]
+            }
           }
         },
         {
@@ -149,8 +241,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/members",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "members"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "members"
+              ]
             }
           }
         }
@@ -163,15 +261,26 @@
           "name": "Create invitation (OWNER/ADMIN only)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"email\": \"userb@flowdeck.dev\",\n  \"role\": \"MEMBER\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/invitations",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "invitations"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "invitations"
+              ]
             },
             "description": "Requires the caller to be OWNER or ADMIN of the org. A plain MEMBER gets 403. A non-member gets 403."
           },
@@ -192,15 +301,25 @@
           "name": "Accept invitation (as the invited user)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"token\": \"{{inviteToken}}\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/invitations/accept",
-              "host": ["{{baseUrl}}"],
-              "path": ["invitations", "accept"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "invitations",
+                "accept"
+              ]
             },
             "description": "Log in as the INVITED user first (their accessToken must be in the env). Re-sending the same token returns 409 (replay blocked)."
           }
@@ -214,15 +333,26 @@
           "name": "Create project (OWNER/ADMIN only)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Website Redesign\",\n  \"description\": \"Marketing site refresh\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects"
+              ]
             },
             "description": "Requires OWNER or ADMIN membership. A plain MEMBER gets 403."
           },
@@ -246,8 +376,14 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects"
+              ]
             },
             "description": "Any member of the org can read."
           }
@@ -259,8 +395,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}"
+              ]
             },
             "description": "Tenant-scoped: requesting this project id under a DIFFERENT org's URL returns 404."
           }
@@ -269,15 +412,27 @@
           "name": "Update project (OWNER/ADMIN only)",
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Website Redesign v2\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}"
+              ]
             }
           }
         },
@@ -288,8 +443,15 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}"
+              ]
             }
           }
         }
@@ -302,12 +464,28 @@
           "name": "Create board (OWNER/ADMIN only)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Sprint 1\"\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sprint 1\"\n}"
+            },
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards"
+              ]
             }
           },
           "event": [
@@ -330,8 +508,16 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards"
+              ]
             }
           }
         },
@@ -342,8 +528,17 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards",
+                "{{boardId}}"
+              ]
             }
           }
         },
@@ -351,12 +546,29 @@
           "name": "Update board (OWNER/ADMIN only)",
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Sprint 1 (renamed)\"\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sprint 1 (renamed)\"\n}"
+            },
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards",
+                "{{boardId}}"
+              ]
             }
           }
         },
@@ -367,8 +579,17 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards",
+                "{{boardId}}"
+              ]
             }
           }
         }
@@ -381,12 +602,30 @@
           "name": "Create column (OWNER/ADMIN only)",
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Todo\"\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Todo\"\n}"
+            },
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}", "columns"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards",
+                "{{boardId}}",
+                "columns"
+              ]
             },
             "description": "New column is appended at the end (position = current column count)."
           },
@@ -410,8 +649,18 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}", "columns"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards",
+                "{{boardId}}",
+                "columns"
+              ]
             }
           }
         },
@@ -419,12 +668,31 @@
           "name": "Update column (OWNER/ADMIN only)",
           "request": {
             "method": "PATCH",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "body": { "mode": "raw", "raw": "{\n  \"name\": \"In Progress\"\n}" },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"In Progress\"\n}"
+            },
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns/{{columnId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}", "columns", "{{columnId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards",
+                "{{boardId}}",
+                "columns",
+                "{{columnId}}"
+              ]
             }
           }
         },
@@ -435,8 +703,188 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns/{{columnId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["organizations", "{{orgId}}", "projects", "{{projectId}}", "boards", "{{boardId}}", "columns", "{{columnId}}"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards",
+                "{{boardId}}",
+                "columns",
+                "{{columnId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Create task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Fix login bug\",\n  \"priority\": \"HIGH\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns/{{columnId}}/tasks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards",
+                "{{boardId}}",
+                "columns",
+                "{{columnId}}",
+                "tasks"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r=pm.response.json();",
+                  "if(r.id)pm.environment.set('taskId',r.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List tasks (ordered by position)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns/{{columnId}}/tasks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards",
+                "{{boardId}}",
+                "columns",
+                "{{columnId}}",
+                "tasks"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update task",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Fix login bug (urgent)\",\n  \"priority\": \"URGENT\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns/{{columnId}}/tasks/{{taskId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards",
+                "{{boardId}}",
+                "columns",
+                "{{columnId}}",
+                "tasks",
+                "{{taskId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Move task (drag & drop)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetColumnId\": \"{{columnId}}\",\n  \"targetPosition\": 0\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns/{{columnId}}/tasks/{{taskId}}/move",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards",
+                "{{boardId}}",
+                "columns",
+                "{{columnId}}",
+                "tasks",
+                "{{taskId}}",
+                "move"
+              ]
+            },
+            "description": "Set targetColumnId to another column id to move across columns."
+          }
+        },
+        {
+          "name": "Delete task",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/organizations/{{orgId}}/projects/{{projectId}}/boards/{{boardId}}/columns/{{columnId}}/tasks/{{taskId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "organizations",
+                "{{orgId}}",
+                "projects",
+                "{{projectId}}",
+                "boards",
+                "{{boardId}}",
+                "columns",
+                "{{columnId}}",
+                "tasks",
+                "{{taskId}}"
+              ]
             }
           }
         }
