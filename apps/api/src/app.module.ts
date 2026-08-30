@@ -11,6 +11,7 @@ import { ProjectsModule } from './projects/projects.module';
 import { BoardsModule } from './boards/boards.module';
 import { ColumnsModule } from './columns/columns.module';
 import { TasksModule } from './tasks/tasks.module';
+import { RealtimeModule } from './realtime/realtime.module';
 @Module({
   imports: [
     PrismaModule,
@@ -23,6 +24,7 @@ import { TasksModule } from './tasks/tasks.module';
     BoardsModule,
     ColumnsModule,
     TasksModule,
+    RealtimeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

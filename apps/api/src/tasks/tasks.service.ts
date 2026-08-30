@@ -3,10 +3,13 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { MoveTaskDto } from './dto/move-task.dto';
-
+import { RealtimeGateway } from '../realtime/realtime.gateway';
 @Injectable()
 export class TasksService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly realtime: RealtimeGateway,
+  ) {}
 
   private async assertColumnInOrg(
     organizationId: string,
@@ -42,7 +45,7 @@ export class TasksService {
   ) {
     await this.assertColumnInOrg(organizationId, projectId, boardId, columnId);
     const count = await this.prisma.task.count({ where: { columnId } });
-    return this.prisma.task.create({
+    const task = await this.prisma.task.create({
       data: {
         columnId,
         title: dto.title,
@@ -53,6 +56,8 @@ export class TasksService {
         position: count,
       },
     });
+    this.realtime.emitToBoard(boardId, `task:created`, task);
+    return task;
   }
   async findAll(
     organizationId: string,
@@ -89,7 +94,9 @@ export class TasksService {
     if (result.count === 0) {
       throw new NotFoundException('Task not found');
     }
-    return this.prisma.task.findUnique({ where: { id: taskId } });
+    const task = await this.prisma.task.findUnique({ where: { id: taskId } });
+    this.realtime.emitToBoard(boardId, `task:updated`, task);
+    return task;
   }
 
   async remove(
@@ -106,6 +113,7 @@ export class TasksService {
     if (result.count === 0) {
       throw new NotFoundException('Task not found');
     }
+    this.realtime.emitToBoard(boardId, `task:deleted`, { id: taskId });
     return { success: true };
   }
 
@@ -131,7 +139,7 @@ export class TasksService {
       dto.targetColumnId,
     );
 
-    return this.prisma.$transaction(async (tx) => {
+    const movedTask = await this.prisma.$transaction(async (tx) => {
       const task = await tx.task.findFirst({
         where: { id: taskId, columnId: sourceColumnId },
       });
@@ -203,5 +211,10 @@ export class TasksService {
         data: { columnId: dto.targetColumnId, position: to },
       });
     });
+
+    // Broadcast AFTER the transaction commits — everyone watching this board
+    // gets the moved task live. (If the tx had rolled back, we'd never emit.)
+    this.realtime.emitToBoard(boardId, 'task:moved', movedTask);
+    return movedTask;
   }
 }
