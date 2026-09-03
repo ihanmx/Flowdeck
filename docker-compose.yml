@@ -33,6 +33,27 @@ services:
       timeout: 5s
       retries: 5
 
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: flowdeck-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      PORT: 3001
+      WEB_ORIGIN: http://localhost:3000
+      DATABASE_URL: postgresql://flowdeck:flowdeck@postgres:5432/flowdeck?schema=public
+      REDIS_URL: redis://redis:6379
+      JWT_ACCESS_SECRET: dev-access-secret-change-me
+      JWT_REFRESH_SECRET: dev-refresh-secret-change-me-and-different
+    ports:
+      - "3001:3001"
+
 volumes:
   postgres_data:
   redis_data:

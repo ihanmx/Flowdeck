@@ -1,0 +1,41 @@
+# --- Dependencies: installed FRESH inside the image (host copy is Windows-specific) ---
+**/node_modules
+.pnpm-store
+
+# --- Build outputs: recompiled inside the image ---
+**/dist
+**/.next
+**/build
+**/.turbo
+
+# --- Prisma generated client: regenerated inside the image ---
+apps/api/src/generated
+
+# --- Secrets: NEVER copy into an image ---
+**/.env
+**/.env.local
+**/.env.*.local
+
+# --- Git & CI metadata: not needed to run the app ---
+.git
+.github
+.gitignore
+
+# --- Editor / OS cruft ---
+.vscode
+.idea
+**/.DS_Store
+Thumbs.db
+
+# --- Logs ---
+**/*.log
+
+# --- Non-runtime files: docs, Postman, markdown ---
+docs
+postman
+**/*.md
+
+# --- Tests: not shipped in the production image ---
+**/*.spec.ts
+**/test
+coverage

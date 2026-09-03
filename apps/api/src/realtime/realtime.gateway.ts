@@ -48,7 +48,11 @@ export class RealtimeGateway implements OnGatewayConnection {
   async handleConnection(client: AppSocket) {
     //there is no guards for websockets, so we have to manually check if the user is authenticated. We do this by checking if the client has a valid JWT token in the handshake auth data. If the token is valid, we store the userId in the client data for later use. If the token is invalid, we disconnect the client.
     try {
-      const token = client.handshake.auth?.token as string | undefined;
+      // Accept the token from the handshake auth (the app's real path),
+      // OR a ?token= query param (easy to send from Postman / a browser).
+      const token =
+        (client.handshake.auth?.token as string | undefined) ??
+        (client.handshake.query?.token as string | undefined);
       if (!token) throw new Error('No token');
 
       const payload = await this.jwt.verifyAsync<JwtPayload>(token, {
