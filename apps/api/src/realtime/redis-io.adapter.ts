@@ -24,7 +24,9 @@ export class RedisIoAdapter extends IoAdapter {
   }
   //plugging radis with socket io
   createIOServer(port: number, options?: ServerOptions): Server {
-    const server = super.createIOServer(port, options);
+    // super.createIOServer is typed `any` by NestJS — narrow it to Server so
+    // the .adapter() call and return are type-safe (no "unsafe any" lint errors).
+    const server = super.createIOServer(port, options) as Server;
 
     server.adapter(this.adapterConstructor);
     return server;
