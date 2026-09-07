@@ -48,7 +48,7 @@ but the architecture, security, and operations that real SaaS requires.
 ```mermaid
 flowchart LR
   subgraph Client
-    W[Next.js web] 
+    W[Next.js web]
   end
   subgraph API[NestJS API]
     G[REST controllers + Guards]
@@ -64,24 +64,24 @@ flowchart LR
 ```
 
 **Request → change → broadcast:** a task move comes in over REST, is validated + authorized by
-guards, committed to Postgres in a transaction, and *then* broadcast over WebSockets (through
+guards, committed to Postgres in a transaction, and _then_ broadcast over WebSockets (through
 Redis, so it reaches clients on every API instance) to everyone watching that board.
 
 ---
 
 ## Tech stack
 
-| Area | Choices |
-|---|---|
-| Backend | NestJS 11, TypeScript |
-| Database | PostgreSQL 16, Prisma 7 (driver adapters) |
-| Real-time | Socket.IO + `@socket.io/redis-adapter` |
-| Cache / pub-sub | Redis 7 |
-| Auth | Passport (JWT access + refresh strategies), bcrypt |
-| Validation | class-validator + global ValidationPipe |
-| Tooling | pnpm workspaces (monorepo), ESLint, Prettier |
-| DevOps | Docker (multi-stage), docker-compose, GitHub Actions → GHCR |
-| Frontend (next up) | Next.js (App Router), Tailwind CSS, shadcn/ui |
+| Area               | Choices                                                     |
+| ------------------ | ----------------------------------------------------------- |
+| Backend            | NestJS 11, TypeScript                                       |
+| Database           | PostgreSQL 16, Prisma 7 (driver adapters)                   |
+| Real-time          | Socket.IO + `@socket.io/redis-adapter`                      |
+| Cache / pub-sub    | Redis 7                                                     |
+| Auth               | Passport (JWT access + refresh strategies), bcrypt          |
+| Validation         | class-validator + global ValidationPipe                     |
+| Tooling            | pnpm workspaces (monorepo), ESLint, Prettier                |
+| DevOps             | Docker (multi-stage), docker-compose, GitHub Actions → GHCR |
+| Frontend (next up) | Next.js (App Router), Tailwind CSS, shadcn/ui               |
 
 ---
 
@@ -107,6 +107,7 @@ pnpm dev:api
 ```
 
 **Run the whole stack in containers instead:**
+
 ```bash
 docker compose up -d --build
 ```
@@ -154,4 +155,4 @@ See [`docs/PROJECT_GUIDE.md`](./docs/PROJECT_GUIDE.md) for a deep dive into ever
 
 ---
 
-<p align="center"><em>Built as a learning-in-public project. Frontend coming next.</em></p>
+<!-- <p align="center"><em>Built as a learning-in-public project. Frontend coming next.</em></p> -->
