@@ -4,6 +4,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { MoveTaskDto } from './dto/move-task.dto';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
+import { Prisma } from '../generated/prisma/client';
 @Injectable()
 export class TasksService {
   constructor(
@@ -139,82 +140,105 @@ export class TasksService {
       dto.targetColumnId,
     );
 
-    const movedTask = await this.prisma.$transaction(async (tx) => {
-      const task = await tx.task.findFirst({
-        where: { id: taskId, columnId: sourceColumnId },
-      });
-
-      if (!task) {
-        throw new NotFoundException('Task not found');
-      }
-
-      //we need to use the position to guarantee the order of the tasks because the columns id cant be used alone because it cant return tasks in order the smae Idea we cant relay on DB insertion order
-
-      const from = task.position;
-      const to = dto.targetPosition;
-      const sameColumn = sourceColumnId === dto.targetColumnId;
-      if (sameColumn) {
-        if (from === to) {
-          return task; //keep the task in the same position if the source and target positions are the same
-        }
-
-        if (to > from) {
-          //move down the task in the same column
-          await tx.task.updateMany({
-            where: {
-              columnId: sourceColumnId,
-              position: {
-                gt: from,
-                lte: to,
-              },
-            },
-            data: {
-              position: {
-                decrement: 1,
-              },
-            },
-          });
-        } else if (to < from) {
-          //move up the task in the same column
-          await tx.task.updateMany({
-            where: {
-              columnId: sourceColumnId,
-              position: {
-                gte: to,
-                lt: from,
-              },
-            },
-            data: {
-              position: {
-                increment: 1,
-              },
-            },
-          });
-        }
-      } else {
-        //cross column move
-        // 1. close the gap in the source column
-        await tx.task.updateMany({
-          where: { columnId: sourceColumnId, position: { gt: from } },
-          data: { position: { decrement: 1 } },
-        });
-        // 2. open a gap in the target column
-        await tx.task.updateMany({
-          where: { columnId: dto.targetColumnId, position: { gte: to } },
-          data: { position: { increment: 1 } },
-        });
-      }
-
-      // 3. place the task in its new home
-      return tx.task.update({
-        where: { id: taskId },
-        data: { columnId: dto.targetColumnId, position: to },
-      });
-    });
+    const movedTask = await this.moveWithRetry(sourceColumnId, taskId, dto);
 
     // Broadcast AFTER the transaction commits — everyone watching this board
     // gets the moved task live. (If the tx had rolled back, we'd never emit.)
     this.realtime.emitToBoard(boardId, 'task:moved', movedTask);
     return movedTask;
+  }
+
+  /**
+   * Runs the position-shifting transaction at SERIALIZABLE isolation so that two
+   * people moving tasks in the same column at the same time can never corrupt the
+   * order. If Postgres detects a conflict it aborts one transaction (error P2034);
+   * we simply retry it, re-reading fresh positions.
+   */
+  private async moveWithRetry(
+    sourceColumnId: string,
+    taskId: string,
+    dto: MoveTaskDto,
+  ) {
+    const MAX_ATTEMPTS = 3;
+
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      try {
+        return await this.prisma.$transaction(
+          async (tx) => {
+            const task = await tx.task.findFirst({
+              where: { id: taskId, columnId: sourceColumnId },
+            });
+
+            if (!task) {
+              throw new NotFoundException('Task not found');
+            }
+
+            const from = task.position;
+            const to = dto.targetPosition;
+            const sameColumn = sourceColumnId === dto.targetColumnId;
+
+            if (sameColumn) {
+              if (from === to) {
+                return task; // no-op: dropped back in the same spot
+              }
+
+              if (to > from) {
+                // moving DOWN: shift the tasks in (from, to] up by one
+                await tx.task.updateMany({
+                  where: {
+                    columnId: sourceColumnId,
+                    position: { gt: from, lte: to },
+                  },
+                  data: { position: { decrement: 1 } },
+                });
+              } else {
+                // moving UP: shift the tasks in [to, from) down by one
+                await tx.task.updateMany({
+                  where: {
+                    columnId: sourceColumnId,
+                    position: { gte: to, lt: from },
+                  },
+                  data: { position: { increment: 1 } },
+                });
+              }
+            } else {
+              // cross-column move
+              // 1. close the gap in the source column
+              await tx.task.updateMany({
+                where: { columnId: sourceColumnId, position: { gt: from } },
+                data: { position: { decrement: 1 } },
+              });
+              // 2. open a gap in the target column
+              await tx.task.updateMany({
+                where: { columnId: dto.targetColumnId, position: { gte: to } },
+                data: { position: { increment: 1 } },
+              });
+            }
+
+            // 3. place the task in its new home
+            return tx.task.update({
+              where: { id: taskId },
+              data: { columnId: dto.targetColumnId, position: to },
+            });
+          },
+          { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+        );
+      } catch (error) {
+        const isWriteConflict =
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2034';
+
+        // A conflict with a concurrent move → retry with fresh reads.
+        if (isWriteConflict && attempt < MAX_ATTEMPTS) {
+          continue;
+        }
+        // Anything else (or out of retries) → surface the error.
+        throw error;
+      }
+    }
+
+    // The loop always returns or throws above; this satisfies TypeScript's
+    // "not all paths return" and guards against a logic slip.
+    throw new Error('Task move failed after multiple retries');
   }
 }
