@@ -1,26 +1,72 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---- LIGHT THEME (default) ---- */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --canvas: #f6f8fb; /* app background */
+  --surface: #ffffff; /* cards, panels */
+  --surface-2: #ffffff; /* raised surfaces */
+  --line: #e5eaf1; /* borders, dividers */
+  --ink: #0f172a; /* strong text / headings */
+  --body: #334155; /* body text */
+  --muted: #6b7a90; /* secondary text */
+
+  --primary-50: #f0fdfa;
+  --primary-400: #2dd4bf;
+  --primary-500: #14b8a6; /* brand */
+  --primary-600: #0d9488;
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
 }
 
+/* ---- DARK THEME ---- */
+
+.dark {
+  --canvas: #0b1120;
+  --surface: #131c2e;
+  --surface-2: #1b2740;
+  --line: #26324a;
+  --ink: #f1f5f9;
+  --body: #c7d2e1;
+  --muted: #8296b4;
+}
+
+/* Expose tokens to Tailwind as utilities: bg-surface, text-ink, border-line, bg-primary-500 …
+   `inline` makes them reference the vars above, so utilities re-theme at runtime. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-body: var(--body);
+  --color-muted: var(--muted);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary-50: var(--primary-50);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
+
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-sora), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  --radius: 0.75rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--canvas);
+  color: var(--body);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
