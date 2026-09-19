@@ -6,10 +6,11 @@
     "node": ">=20"
   },
   "scripts": {
-    "db:up": "docker compose up -d",
+    "db:up": "docker compose up -d postgres redis",
     "db:down": "docker compose down",
     "db:logs": "docker compose logs -f",
     "dev:api": "pnpm --filter api start:dev",
-    "dev:web": "pnpm --filter web dev"
+    "dev:web": "pnpm --filter web dev",
+    "up:full": "docker compose up -d --build"
   }
 }

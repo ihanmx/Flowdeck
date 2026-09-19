@@ -1,6 +1,37 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage, StateStorage } from "zustand/middleware";
 
+const REMEMBER_KEY = "flowdeck-remember";
+
+/** Call this BEFORE tokens are written, to choose where they persist. */
+
+export function setRememberMe(remember: boolean) {
+  if (typeof window === "undefined") return; //server-side → do nothing
+  localStorage.setItem(REMEMBER_KEY, remember ? "true" : "false");
+}
+
+/** remember → localStorage (survives browser close); not → sessionStorage (dies on close). */
+const authStorage: StateStorage = {
+  getItem: (name) => {
+    if (typeof window === "undefined") return null; //server-side → do nothing
+    // read from wherever the token actually lives
+    return localStorage.getItem(name) ?? sessionStorage.getItem(name);
+  },
+  setItem: (name, value) => {
+    if (typeof window === "undefined") return;
+    const remember = localStorage.getItem(REMEMBER_KEY) === "true";
+    if (remember) {
+      localStorage.setItem(name, value);
+    } else {
+      sessionStorage.setItem(name, value);
+    }
+  },
+  removeItem: (name) => {
+    if (typeof window === "undefined") return;
+    localStorage.removeItem(name);
+    sessionStorage.removeItem(name);
+  },
+};
 export interface AuthUser {
   id: string;
   email: string;
@@ -49,6 +80,7 @@ export const useAuthStore = create<AuthState>()(
 
     {
       name: "flowdeck-auth", // Only persist the real auth data — NOT the hydration flag (it must start false each load).
+      storage: createJSONStorage(() => authStorage),
       partialize: (s) => ({
         user: s.user,
         accessToken: s.accessToken,
