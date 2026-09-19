@@ -9,11 +9,14 @@ import { useRegister } from "@/modules/auth/hooks";
 import { Button } from "@/shared/components/ui/Button";
 import { Input } from "@/shared/components/ui/Input";
 import { FormField } from "@/shared/components/ui/FormField";
+import { RememberMe } from "./RememberMe";
+import { setRememberMe } from "@/stores/auth.store";
 
 const scheme = z.object({
   name: z.string().min(2, "Enter your name"),
   email: z.string().email("Enter a valid email"),
   password: z.string().min(8, "At least 8 characters"),
+  rememberMe: z.boolean(),
 });
 type FormValues = z.infer<typeof scheme>;
 
@@ -22,7 +25,15 @@ export function RegisterForm() {
     register: field,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ resolver: zodResolver(scheme) });
+  } = useForm<FormValues>({
+    resolver: zodResolver(scheme),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      rememberMe: true,
+    },
+  });
 
   const { mutate, isPending, error } = useRegister();
   const serverError = error?.response?.data.message ?? null;
@@ -37,7 +48,10 @@ export function RegisterForm() {
       </p>
 
       <form
-        onSubmit={handleSubmit((v) => mutate(v))}
+        onSubmit={handleSubmit(({ rememberMe, ...data }) => {
+          setRememberMe(rememberMe);
+          mutate(data);
+        })}
         className="mt-6 flex flex-col gap-4"
       >
         <FormField label="Full name" error={errors.name?.message}>
@@ -65,6 +79,7 @@ export function RegisterForm() {
             {...field("password")}
           />
         </FormField>
+        <RememberMe {...field("rememberMe")} />
 
         {serverError && <p className="text-sm text-danger">{serverError}</p>}
 

@@ -25,5 +25,5 @@ export function registerApi(input: RegisterInput) {
   return apiClient.post<AuthResponse>("/auth/register", input);
 }
 export function logoutApi() {
-  return apiClient.post("/auth/logout");
+  return apiClient.post<void>("/auth/logout");
 }

@@ -1,5 +1,4 @@
 "use client";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -9,10 +8,13 @@ import { useLogin } from "@/modules/auth/hooks";
 import { Button } from "@/shared/components/ui/Button";
 import { Input } from "@/shared/components/ui/Input";
 import { FormField } from "@/shared/components/ui/FormField";
+import { RememberMe } from "./RememberMe";
+import { setRememberMe } from "@/stores/auth.store";
 
 const schema = z.object({
   email: z.string().email("Enter a valid email"),
   password: z.string().min(8, "At least 8 characters"),
+  rememberMe: z.boolean(),
 });
 type FormValues = z.infer<typeof schema>;
 
@@ -21,7 +23,14 @@ export function LoginForm() {
     register: field,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ resolver: zodResolver(schema) });
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: true,
+    },
+  });
   const { mutate, isPending, error } = useLogin();
   const serverError = error?.response?.data.message ?? null;
 
@@ -33,7 +42,10 @@ export function LoginForm() {
       </p>
 
       <form
-        onSubmit={handleSubmit((v) => mutate(v))}
+        onSubmit={handleSubmit(({ rememberMe, ...credentials }) => {
+          setRememberMe(rememberMe);
+          mutate(credentials);
+        })}
         className="mt-6 flex flex-col gap-4"
       >
         <FormField label="Email address" error={errors.email?.message}>
@@ -53,7 +65,8 @@ export function LoginForm() {
           />
         </FormField>
 
-        <div className="flex justify-end -mt-1">
+        <div className="flex items-center justify-between -mt-1">
+          <RememberMe {...field("rememberMe")} />
           <Link
             href="/forgot-password"
             className="text-sm text-primary-500 hover:underline"
