@@ -2,7 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import {
+  registerSchema,
+  type RegisterFormValues,
+} from "@/modules/auth/schemas";
 import Link from "next/link";
 import { Mail, Lock, User } from "lucide-react";
 import { useRegister } from "@/modules/auth/hooks";
@@ -12,13 +15,8 @@ import { FormField } from "@/shared/components/ui/FormField";
 import { RememberMe } from "./RememberMe";
 import { setRememberMe } from "@/stores/auth.store";
 
-const scheme = z.object({
-  name: z.string().min(2, "Enter your name"),
-  email: z.string().email("Enter a valid email"),
-  password: z.string().min(8, "At least 8 characters"),
-  rememberMe: z.boolean(),
-});
-type FormValues = z.infer<typeof scheme>;
+const scheme = registerSchema;
+type FormValues = RegisterFormValues;
 
 export function RegisterForm() {
   const {

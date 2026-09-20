@@ -1,7 +1,7 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { loginSchema, type LoginFormValues } from "@/modules/auth/schemas";
 import Link from "next/link";
 import { Mail } from "lucide-react";
 import { useLogin } from "@/modules/auth/hooks";
@@ -11,12 +11,8 @@ import { FormField } from "@/shared/components/ui/FormField";
 import { RememberMe } from "./RememberMe";
 import { setRememberMe } from "@/stores/auth.store";
 
-const schema = z.object({
-  email: z.string().email("Enter a valid email"),
-  password: z.string().min(8, "At least 8 characters"),
-  rememberMe: z.boolean(),
-});
-type FormValues = z.infer<typeof schema>;
+const schema = loginSchema;
+type FormValues = LoginFormValues;
 
 export function LoginForm() {
   const {
