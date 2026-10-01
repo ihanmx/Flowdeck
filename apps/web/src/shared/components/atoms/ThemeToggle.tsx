@@ -3,7 +3,9 @@ import { useTheme } from "next-themes";
 import { Sun, Moon } from "lucide-react";
 
 export function ThemeToggle() {
+    //set theme 
   const { setTheme } = useTheme();
+
 
   const toggle = () => {
     // read the actual applied theme from the DOM at click time (client-only)
