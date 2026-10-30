@@ -11,6 +11,7 @@
     "db:logs": "docker compose logs -f",
     "dev:api": "pnpm --filter api start:dev",
     "dev:web": "pnpm --filter web dev",
-    "up:full": "docker compose up -d --build"
+    "up:full": "docker compose up -d --build",
+    "prisma-studio": "npx prisma studio"
   }
 }

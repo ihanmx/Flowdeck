@@ -2,10 +2,12 @@
 import { Search, Bell } from "lucide-react";
 import { ThemeToggle } from "@/shared/components/atoms/ThemeToggle";
 import { UserMenu } from "./UserMenu";
+import { OrgSwitcher } from "@/modules/organizations/components/organisms/OrgSwitcher";
 
 export function Topbar() {
   return (
     <header className="flex h-16 items-center gap-4 border-b border-line bg-surface px-4 md:px-6">
+      <OrgSwitcher />
       <div className="relative max-w-md flex-1">
         <Search
           size={16}

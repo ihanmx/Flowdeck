@@ -22,8 +22,10 @@ const authStorage: StateStorage = {
     const remember = localStorage.getItem(REMEMBER_KEY) === "true";
     if (remember) {
       localStorage.setItem(name, value);
+      sessionStorage.removeItem(name); // never leave a copy in the other storage
     } else {
       sessionStorage.setItem(name, value);
+      localStorage.removeItem(name); // never leave a copy in the other storage
     }
   },
   removeItem: (name) => {

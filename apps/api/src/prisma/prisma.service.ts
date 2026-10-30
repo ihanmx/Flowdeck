@@ -12,7 +12,13 @@ export class PrismaService
     const adapter = new PrismaPg({
       connectionString: configService.get<string>('DATABASE_URL'),
     });
-    super({ adapter });
+    super({
+      adapter,
+      log:
+        process.env.NODE_ENV === 'production'
+          ? ['warn', 'error']
+          : ['query', 'warn', 'error'],
+    });
   }
 
   async onModuleInit() {
