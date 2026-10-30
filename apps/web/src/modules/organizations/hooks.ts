@@ -40,7 +40,7 @@ export function useActiveOrganization() {
   const { data: orgs = [], isLoading } = useOrganizations();
   const activeOrgId = useOrgStore((s) => s.activeOrgId);
 
-  const activeOrg = orgs.find((o) => o.id === activeOrgId) ?? orgs[0] ?? null;
+  const activeOrg = orgs.find((o) => o.id === activeOrgId) ?? orgs[0] ?? null; //null if no orgs yet,[0] if no active org but there are orgs
 
   return { orgs, activeOrg, isLoading };
 }

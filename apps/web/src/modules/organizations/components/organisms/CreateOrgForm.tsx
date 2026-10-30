@@ -18,7 +18,7 @@ const toSlug = (value: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-export function CreateOrgForm() {
+export function CreateOrgForm({ onCreated }: { onCreated?: () => void }) {
   const setActiveOrg = useOrgStore((s) => s.setActiveOrg);
   const {
     register: field,
@@ -49,7 +49,12 @@ export function CreateOrgForm() {
 
       <form
         onSubmit={handleSubmit((values) =>
-          mutate(values, { onSuccess: (org) => setActiveOrg(org.id) }),
+          mutate(values, {
+            onSuccess: (org) => {
+              setActiveOrg(org.id);
+              onCreated?.();
+            },
+          }),
         )}
         className="mt-6 flex flex-col gap-4"
       >
