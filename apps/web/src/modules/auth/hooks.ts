@@ -9,7 +9,8 @@ import {
   type LoginInput,
   type RegisterInput,
 } from "./api";
-
+import { useQueryClient } from "@tanstack/react-query";
+import { useOrgStore } from "@/stores/org.store";
 export function useLogin() {
   const router = useRouter();
   const setAuth = useAuthStore((s) => s.setAuth);
@@ -41,12 +42,16 @@ export function useRegister() {
 export function useLogout() {
   const router = useRouter();
   const clearAuth = useAuthStore((s) => s.clearAuth);
+  const queryClient = useQueryClient();
   return useApiMutation<void, void>({
     mutationFn: logoutApi,
     options: {
       onSettled: () => {
         clearAuth();
-        router.push("/");
+        useOrgStore.getState().setActiveOrg(null);
+
+        queryClient.clear(); // wipe ALL cached server data
+        router.push("/login");
       },
     },
   });

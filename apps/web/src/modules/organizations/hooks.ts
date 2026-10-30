@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useApiQuery } from "@/shared/hooks/useApiQuery";
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
 import { getMyOrganizations, createOrganization, getOrgMembers } from "./api";
+import { useOrgStore } from "@/stores/org.store";
 
 // Central place for this module's cache keys — so reads & invalidations always match.
 export const orgKeys = {
@@ -33,4 +34,13 @@ export function useOrgMembers(orgId: string) {
     queryFn: () => getOrgMembers(orgId),
     options: { enabled: !!orgId }, // don't run until we have an org id
   });
+}
+
+export function useActiveOrganization() {
+  const { data: orgs = [], isLoading } = useOrganizations();
+  const activeOrgId = useOrgStore((s) => s.activeOrgId);
+
+  const activeOrg = orgs.find((o) => o.id === activeOrgId) ?? orgs[0] ?? null;
+
+  return { orgs, activeOrg, isLoading };
 }
