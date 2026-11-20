@@ -8,3 +8,9 @@ export function getProjects(orgId: string) {
 export function createProject(orgId: string, input: CreateProjectInput) {
   return apiClient.post<Project>(`/organizations/${orgId}/projects`, input);
 }
+
+export function getProject(orgId: string, projectId: string) {
+  return apiClient.get<Project>(
+    `/organizations/${orgId}/projects/${projectId}`,
+  );
+}
