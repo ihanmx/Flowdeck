@@ -37,6 +37,20 @@ export class BoardsService {
     await this.assertProjectInOrg(organizationId, projectId);
     const board = await this.prisma.board.findFirst({
       where: { id: boardId, projectId },
+      // Everything the board screen needs in ONE request: columns → tasks → assignee fix 1+N req issue
+      include: {
+        columns: {
+          orderBy: { position: 'asc' },
+          include: {
+            tasks: {
+              orderBy: { position: 'asc' },
+              include: {
+                assignee: { select: { id: true, email: true, name: true } },
+              },
+            },
+          },
+        },
+      },
     });
     if (!board) {
       throw new NotFoundException('Board not found');
