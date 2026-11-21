@@ -1,5 +1,5 @@
 import apiClient from "@/services/apiClient";
-import type { Board } from "./types";
+import type { Board, BoardDetail, BoardRef, Column } from "./types";
 
 const boardsUrl = (orgId: string, projectId: string) =>
   `/organizations/${orgId}/projects/${projectId}/boards`;
@@ -14,4 +14,20 @@ export function createBoard(
   input: { name: string },
 ) {
   return apiClient.post<Board>(boardsUrl(orgId, projectId), input);
+}
+
+export function getBoard({ orgId, projectId, boardId }: BoardRef) {
+  return apiClient.get<BoardDetail>(
+    `${boardsUrl(orgId, projectId)}/${boardId}`,
+  );
+}
+
+export function createColumn(
+  { orgId, projectId, boardId }: BoardRef,
+  input: { name: string },
+) {
+  return apiClient.post<Column>(
+    `${boardsUrl(orgId, projectId)}/${boardId}/columns`,
+    input,
+  );
 }
