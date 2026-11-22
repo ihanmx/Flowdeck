@@ -8,6 +8,7 @@ import { useBoard } from "@/modules/boards/hooks";
 import { KanbanColumn } from "@/modules/boards/components/organisms/KanbanColumn";
 import type { BoardRef } from "@/modules/boards/types";
 import { AddColumnForm } from "@/modules/boards/components/organisms/AddColumnForm";
+import { KanbanBoard } from "@/modules/boards/components/organisms/KanbanBoard";
 
 export default function BoardPage() {
   const { projectId, boardId } = useParams<{
@@ -50,12 +51,7 @@ export default function BoardPage() {
         </h1>
       </div>
 
-      <div className="flex min-h-0 flex-1 gap-4 overflow-x-auto pb-2">
-        {board.columns.map((column) => (
-          <KanbanColumn key={column.id} column={column} boardRef={boardRef} />
-        ))}
-        <AddColumnForm boardRef={boardRef} />
-      </div>
+      <KanbanBoard board={board} boardRef={boardRef} />
     </div>
   );
 }
