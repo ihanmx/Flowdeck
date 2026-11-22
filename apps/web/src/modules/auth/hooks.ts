@@ -11,6 +11,8 @@ import {
 } from "./api";
 import { useQueryClient } from "@tanstack/react-query";
 import { useOrgStore } from "@/stores/org.store";
+import { disconnectSocket } from "@/services/socket";
+
 export function useLogin() {
   const router = useRouter();
   const setAuth = useAuthStore((s) => s.setAuth);
@@ -49,7 +51,7 @@ export function useLogout() {
       onSettled: () => {
         clearAuth();
         useOrgStore.getState().setActiveOrg(null);
-
+        disconnectSocket(); // the socket is authenticated as the old user
         queryClient.clear(); // wipe ALL cached server data
         router.push("/login");
       },

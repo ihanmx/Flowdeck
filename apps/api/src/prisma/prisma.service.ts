@@ -15,7 +15,7 @@ export class PrismaService
     super({
       adapter,
       log:
-        process.env.NODE_ENV === 'production'
+        configService.get<string>('LOG_QUERIES') === 'true'
           ? ['warn', 'error']
           : ['query', 'warn', 'error'],
     });

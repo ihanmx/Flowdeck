@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { useActiveOrganization } from "@/modules/organizations/hooks";
-import { useBoard } from "@/modules/boards/hooks";
+import { useBoard } from "@/modules/boards/hooks/hooks";
 import { KanbanColumn } from "@/modules/boards/components/organisms/KanbanColumn";
 import type { BoardRef } from "@/modules/boards/types";
 import { AddColumnForm } from "@/modules/boards/components/organisms/AddColumnForm";

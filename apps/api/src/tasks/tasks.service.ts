@@ -5,6 +5,12 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { MoveTaskDto } from './dto/move-task.dto';
 import { RealtimeGateway } from '../realtime/realtime.gateway';
 import { Prisma } from '../generated/prisma/client';
+
+// Same shape as the tasks inside GET board → clients can use events directly
+const TASK_INCLUDE = {
+  assignee: { select: { id: true, email: true, name: true } },
+} as const;
+
 @Injectable()
 export class TasksService {
   constructor(
@@ -56,6 +62,7 @@ export class TasksService {
         assigneeId: dto.assigneeId,
         position: count,
       },
+      include: TASK_INCLUDE,
     });
     this.realtime.emitToBoard(boardId, `task:created`, task);
     return task;
@@ -95,7 +102,10 @@ export class TasksService {
     if (result.count === 0) {
       throw new NotFoundException('Task not found');
     }
-    const task = await this.prisma.task.findUnique({ where: { id: taskId } });
+    const task = await this.prisma.task.findUnique({
+      where: { id: taskId },
+      include: TASK_INCLUDE,
+    });
     this.realtime.emitToBoard(boardId, `task:updated`, task);
     return task;
   }
