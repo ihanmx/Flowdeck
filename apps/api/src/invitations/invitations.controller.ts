@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Param, Post, UseGuards, Get } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { AuthUser } from '../auth/decorators/current-user.decorator';
@@ -21,5 +21,12 @@ export class InvitationsController {
     @Body() dto: CreateInvitationDto,
   ) {
     return this.invitations.create(organizationId, user.id, dto);
+  }
+
+  @Get()
+  @UseGuards(OrgRolesGuard)
+  @Roles('OWNER', 'ADMIN')
+  findPending(@Param('id') organizationId: string) {
+    return this.invitations.findPending(organizationId);
   }
 }
