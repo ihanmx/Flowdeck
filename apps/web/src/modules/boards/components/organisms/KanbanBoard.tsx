@@ -20,6 +20,7 @@ import { useMoveTask } from "@/modules/tasks/hooks";
 import { TaskCard } from "@/modules/tasks/components/molecules/TaskCard";
 import { KanbanColumn } from "./KanbanColumn";
 import { AddColumnForm } from "./AddColumnForm";
+import { useBoardRealtime } from "../../hooks/useBoardRealTime";
 
 // KanbanBoard is the controller of drag and drop
 interface Props {
@@ -29,6 +30,8 @@ interface Props {
 
 export function KanbanBoard({ board, boardRef }: Props) {
   const dndId = useId(); //dnd-kit gives each DndContext an accessibility ID based on a counter. In Next, the component renders twice: once on the server, then again in the browser. If the counters don't match, React warns about a hydration mismatch. useId() produces the same ID on both,
+  useBoardRealtime(boardRef);
+
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null); // the card dragged now
   const [overColumnId, setOverColumnId] = useState<string | null>(null); //the col the card over
   const { mutate: moveTask } = useMoveTask(boardRef);

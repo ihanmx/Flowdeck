@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
-import { boardKeys } from "@/modules/boards/hooks";
+import { boardKeys } from "@/modules/boards/hooks/hooks";
 import type { BoardRef } from "@/modules/boards/types";
 import { createTask, moveTask, type CreateTaskInput } from "./api";
 import { moveTaskInBoard } from "@/modules/boards/utils";

@@ -1,8 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useApiQuery } from "@/shared/hooks/useApiQuery";
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
-import { getBoards, createBoard, getBoard, createColumn } from "./api";
-import type { BoardRef } from "./types";
+import { getBoards, createBoard, getBoard, createColumn } from "../api";
+import type { BoardRef } from "../types";
 
 export const boardKeys = {
   all: (orgId: string, projectId: string) =>

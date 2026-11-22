@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
 import { createColumnSchema, type CreateColumnFormValues } from "../../schemas";
-import { useCreateColumn } from "../../hooks";
+import { useCreateColumn } from "../../hooks/hooks";
 import type { BoardRef } from "../../types";
 import { Input } from "@/shared/components/ui/Input";
 

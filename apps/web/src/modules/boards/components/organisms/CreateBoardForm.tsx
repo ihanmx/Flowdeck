@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createBoardSchema, type CreateBoardFormValues } from "../../schemas";
-import { useCreateBoard } from "../../hooks";
+import { useCreateBoard } from "../../hooks/hooks";
 import { Button } from "@/shared/components/ui/Button";
 import { Input } from "@/shared/components/ui/Input";
 

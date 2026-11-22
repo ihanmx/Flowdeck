@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { ArrowLeft, Plus, KanbanSquare } from "lucide-react";
 import { useActiveOrganization } from "@/modules/organizations/hooks";
 import { useProject } from "@/modules/projects/hooks";
-import { useBoards } from "@/modules/boards/hooks";
+import { useBoards } from "@/modules/boards/hooks/hooks";
 import { BoardCard } from "@/modules/boards/components/molecules/BoardCard";
 import { CreateBoardForm } from "@/modules/boards/components/organisms/CreateBoardForm";
 import { Button } from "@/shared/components/ui/Button";

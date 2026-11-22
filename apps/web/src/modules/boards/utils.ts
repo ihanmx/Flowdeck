@@ -75,3 +75,47 @@ export function moveTaskInBoard(
 
   return { ...board, columns };
 }
+
+/** Adds a task at its position. Skips it if it's already on the board. */
+
+export function insertTask(board: BoardDetail, task: Task) {
+  if (locateTask(board, task.id)) return board; // already there
+
+  const columns = board.columns.map((col) => {
+    if (col.id !== task.columnId) return col;
+    const tasks = [...col.tasks]; // copy: splice modifies the array
+    tasks.splice(task.position, 0, task);
+    return { ...col, tasks: tasks.map((t, i) => ({ ...t, position: i })) };
+  });
+
+  return { ...board, columns };
+}
+
+/** Removes a task and closes the gap in its column. */
+export function removeTask(board: BoardDetail, taskId: string): BoardDetail {
+  const from = locateTask(board, taskId);
+  if (!from) return board;
+
+  const columns = board.columns.map((col) =>
+    col.id !== from.columnId
+      ? col
+      : {
+          ...col,
+          tasks: col.tasks
+            .filter((t) => t.id !== taskId)
+            .map((t, i) => ({ ...t, position: i })),
+        },
+  );
+
+  return { ...board, columns };
+}
+
+/** Replaces a task with its new version (same column, same place). */
+export function replaceTask(board: BoardDetail, task: Task): BoardDetail {
+  const columns = board.columns.map((col) =>
+    col.id !== task.columnId
+      ? col
+      : { ...col, tasks: col.tasks.map((t) => (t.id === task.id ? task : t)) },
+  );
+  return { ...board, columns };
+}
