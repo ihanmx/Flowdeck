@@ -22,18 +22,22 @@ export class OrganizationsService {
           role: 'OWNER',
         },
       });
-      return organization;
+      return { ...organization, role: 'OWNER' as const }; //creator always owner
     });
   }
 
   async findAllForUser(userId: string) {
-    // "orgs where at least one membership belongs to this user"
-    return this.prisma.organization.findMany({
+    const orgs = await this.prisma.organization.findMany({
       where: { memberships: { some: { userId } } },
       orderBy: { createdAt: 'desc' },
+      include: { memberships: { where: { userId }, select: { role: true } } },
     });
+    // flatten: { ...org, role } instead of { ...org, memberships: [{ role }] }
+    return orgs.map(({ memberships, ...org }) => ({
+      ...org,
+      role: memberships[0].role,
+    }));
   }
-
   async findMembers(organizationId: string) {
     return this.prisma.membership.findMany({
       where: { organizationId },

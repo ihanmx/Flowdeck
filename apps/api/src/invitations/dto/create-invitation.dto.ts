@@ -1,11 +1,10 @@
-import { IsEmail, IsEnum, IsOptional } from 'class-validator';
-import { Role } from '../../generated/prisma/enums';
+import { IsEmail, IsIn, IsOptional } from 'class-validator';
 
 export class CreateInvitationDto {
   @IsEmail()
   email: string;
 
   @IsOptional()
-  @IsEnum(Role)
-  role?: Role;
+  @IsIn(['ADMIN', 'MEMBER', 'VIEWER'])
+  role?: 'ADMIN' | 'MEMBER' | 'VIEWER';
 }
