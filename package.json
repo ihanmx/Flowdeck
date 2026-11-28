@@ -12,6 +12,7 @@
     "dev:api": "pnpm --filter api start:dev",
     "dev:web": "pnpm --filter web dev",
     "up:full": "docker compose up -d --build",
-    "prisma-studio": "npx prisma studio"
+    "prisma-studio": "npx prisma studio",
+    "radis-monitor": "docker exec -it flowdeck-redis redis-cli monitor"
   }
 }

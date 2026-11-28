@@ -5,6 +5,8 @@ import {
   HttpStatus,
   Post,
   UseGuards,
+  Get,
+  Param,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
@@ -21,5 +23,10 @@ export class AcceptInvitationController {
   @HttpCode(HttpStatus.OK)
   accept(@CurrentUser() user: AuthUser, @Body() dto: AcceptInvitationDto) {
     return this.invitations.accept(user, dto);
+  }
+
+  @Get(':token') // → GET /invitations/:token
+  findOne(@Param('token') token: string) {
+    return this.invitations.findByToken(token);
   }
 }

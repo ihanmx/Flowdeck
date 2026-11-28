@@ -19,10 +19,8 @@ export function useLogin() {
   return useApiMutation<LoginInput, AuthResponse>({
     mutationFn: loginApi,
     options: {
-      onSuccess: (data) => {
-        setAuth(data);
-        router.push("/dashboard");
-      },
+      // save user + tokens → GuestGuard sees the token and redirects
+      onSuccess: (data) => setAuth(data),
     },
   });
 }
@@ -33,15 +31,13 @@ export function useRegister() {
   return useApiMutation<RegisterInput, AuthResponse>({
     mutationFn: registerApi,
     options: {
-      onSuccess: (data) => {
-        setAuth(data);
-        router.push("/dashboard");
-      },
+      // save user + tokens → GuestGuard sees the token and redirects
+      onSuccess: (data) => setAuth(data),
     },
   });
 }
 
-export function useLogout() {
+export function useLogout(redirectTo = "/login") {
   const router = useRouter();
   const clearAuth = useAuthStore((s) => s.clearAuth);
   const queryClient = useQueryClient();
@@ -53,7 +49,7 @@ export function useLogout() {
         useOrgStore.getState().setActiveOrg(null);
         disconnectSocket(); // the socket is authenticated as the old user
         queryClient.clear(); // wipe ALL cached server data
-        router.push("/login");
+        router.push(redirectTo);
       },
     },
   });

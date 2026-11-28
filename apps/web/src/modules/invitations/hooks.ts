@@ -2,7 +2,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useApiQuery } from "@/shared/hooks/useApiQuery";
 import { useApiMutation } from "@/shared/hooks/useApiMutation";
 import { orgKeys } from "@/modules/organizations/hooks";
-import { getInvitations, createInvitation, acceptInvitation } from "./api";
+import {
+  getInvitations,
+  getInvitation,
+  createInvitation,
+  acceptInvitation,
+} from "./api";
 import type { InviteRole } from "./types";
 
 export const invitationKeys = {
@@ -14,6 +19,14 @@ export function useInvitations(orgId: string, canManage: boolean) {
     queryKey: invitationKeys.all(orgId),
     queryFn: () => getInvitations(orgId),
     options: { enabled: !!orgId && canManage }, // members would get 403 → don't ask
+  });
+}
+
+export function useInvitation(token: string) {
+  return useApiQuery({
+    queryKey: ["invitations", token],
+    queryFn: () => getInvitation(token),
+    options: { enabled: !!token },
   });
 }
 
