@@ -12,3 +12,12 @@ export interface Invitation {
   organizationId: string;
   createdAt: string;
 }
+
+/** What GET /invitations/:token returns — enough to show the invite page. */
+export interface InvitationPreview {
+  email: string;
+  role: Role;
+  status: "PENDING" | "ACCEPTED" | "REVOKED";
+  expiresAt: string;
+  organization: { name: string };
+}

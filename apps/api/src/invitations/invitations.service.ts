@@ -123,4 +123,21 @@ export class InvitationsService {
       orderBy: { createdAt: 'desc' },
     });
   }
+
+  async findByToken(token: string) {
+    const invitation = await this.prisma.invitation.findUnique({
+      where: { token },
+      select: {
+        email: true,
+        role: true,
+        status: true,
+        expiresAt: true,
+        organization: { select: { name: true } },
+      },
+    });
+    if (!invitation) {
+      throw new NotFoundException('Invitation not found');
+    }
+    return invitation;
+  }
 }
